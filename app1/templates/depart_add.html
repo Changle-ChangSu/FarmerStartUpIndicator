@@ -1,0 +1,39 @@
+{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>后台管理-部门信息录入</title>
+{% endblock %}
+
+{% block js_diy_function %}
+<script>
+    function goBack1() {
+      window.location.href = '/depart/list/';
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="sm_section">
+<form method="post" novalidate>
+    {% csrf_token %}
+    <fieldset class="message_fieldset">
+        <legend>录入部门信息</legend>
+
+        <div class="message_con">
+            <label class="col-sm-2 control-label">部门名称</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="部门名称" name="title" />
+            </div>
+            <br><br><br>
+            <div class="message_footer">
+                <button class="bule" type="submit">保存</button>
+                <button class="orgen" type="button" onclick="goBack1()">取消</button>
+            </div>
+            <br>
+        </div>
+
+    </fieldset>
+</form>
+</section>
+{% endblock %}

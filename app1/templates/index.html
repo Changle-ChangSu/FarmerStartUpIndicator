@@ -1,0 +1,196 @@
+{% extends 'layout_general.html' %}
+
+{% block title %}
+<title>首页</title>
+{% endblock %}
+
+{% block left_nav %}
+    <li class="nav_active"><i class="nav_1"></i><a href="/index/">首页</a> </li>
+    <li><span class="glyphicon glyphicon-list-alt" style="color: white"></span><a href="/report/list/">  调研报告</a></li>
+{% endblock %}
+
+{% block right_nav %}
+    {% if request.session.info.usertype == 0 %}
+        <li><i class="nav_4"></i><a href="/table/">后台管理</a> </li>
+    {% endif %}
+    <li class="dropdown">
+{% endblock %}
+
+{% block content %}
+<!--内容部分-->
+<div class="con left">
+    <div class="select_time">
+        <div class="static_top left">
+            <i></i><span>总体概况</span>
+        </div>
+    </div>
+    <!--数据总概-->
+    <div class="con_div">
+        <div class="con_div_text left">
+            <div class="con_div_text01 left">
+                <div class="left text01_div">
+                    <p style="font-size: 18px;">在库样本数</p>
+                    <p><span class="glyphicon glyphicon-tasks"></span>   {{ num_of_statistics }}</p>
+                </div>
+            </div>
+            <div class="con_div_text01 right">
+                <div class="left text01_div">
+                    <p style="font-size: 18px;">创业人数</p>
+                    <p><span class="glyphicon glyphicon-briefcase"></span>   {{ entrepre_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="con_div_text left">
+            <div class="con_div_text01 left">
+                <div class="left text01_div">
+                    <p style="font-size: 16px;">贫困人数(年收入少于5000元)</p>
+                    <p class="sky"><span class="glyphicon glyphicon-grain"></span>   {{ poor_count }}</p>
+                </div>
+            </div>
+            <div class="con_div_text01 right">
+                <div class="left text01_div">
+                    <p style="font-size: 16px;">富裕人数(年收入多于20万元)</p>
+                    <p class="sky"><span class="glyphicon glyphicon-credit-card"></span>   {{ rich_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="con_div_text left">
+
+            <div class="con_div_text01 left">
+                <div class="left text01_div">
+                    <p style="font-size: 18px;">采用算法</p>
+                    <p class="org"><span class="glyphicon glyphicon-th"></span>   {{ algorithm_name }}</p>
+                </div>
+            </div>
+            <div class="con_div_text01 right">
+                <div class="left text01_div">
+                    <p style="font-size: 18px;">数据截止时间</p>
+                    <p class="org"><span class="glyphicon glyphicon-calendar"></span>   {{ end_date }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--统计分析图-->
+    <div class="div_any">
+        <div class="left div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-yen"></span> 家庭年收入统计 </div>
+                <p id="char1" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-education"></span> 创业与受教育程度统计 </div>
+                <p id="char3" class="p_chart"></p>
+            </div>
+        </div>
+        <div class="div_any02 left ">
+            <div class="div_any_child div_height">
+                <div class="div_any_title any_title_width"><span class="glyphicon glyphicon-map-marker"></span> 样本调查位置 </div>
+                <div id="map_div"></div>
+            </div>
+        </div>
+        <div class="right div_any01">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-pushpin"></span> 创业人数统计 </div>
+                <p id="char2" class="p_chart"></p>
+            </div>
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-flash"></span> 创业与家庭类型统计 </div>
+                <p id="char4" class="p_chart"></p>
+            </div>
+        </div>
+    </div>
+    <!--分析表格-->
+    <div class="div_table">
+        <div class="left div_table_box">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-signal"></span> 贫困县市前5位 </div>
+                <div class="table_p">
+                    <table>
+                       <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>县市名</th>
+                            <th>GDP(亿元)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>1</td><td>四川省松潘县</td><td>-</td></tr>
+                        <tr><td>2</td><td>贵州省普定县</td><td>-</td></tr>
+                        <tr><td>3</td><td>四川省木里藏族自治县</td><td>-</td></tr>
+                        <tr><td>4</td><td>云南省永善县</td><td>-</td></tr>
+                        <tr><td>5</td><td>云南省禄丰县</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="left div_table_box">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-signal"></span> 市场活力前5名 </div>
+                <div class="table_p">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>县市名</th>
+                            <th>GDP(亿元)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>1</td><td>云南省禄丰县</td><td>-</td></tr>
+                        <tr><td>2</td><td>四川凉山彝族自治州</td><td>-</td></tr>
+                        <tr><td>3</td><td>广东省连南瑶族自治县</td><td>-</td></tr>
+                        <tr><td>4</td><td>河南省夏邑县</td><td>-</td></tr>
+                        <tr><td>5</td><td>湖南省安化县</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="left div_table_box">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-signal"></span> 成功企业家前5名 </div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>排名</th>
+                            <th>姓名</th>
+                            <th>年收入(万元)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>1</td><td>{{ names.0 }}</td><td>{{ incomes.0 }}</td></tr>
+                        <tr><td>2</td><td>{{ names.1 }}</td><td>{{ incomes.1 }}</td></tr>
+                        <tr><td>3</td><td>{{ names.2 }}</td><td>{{ incomes.2 }}</td></tr>
+                        <tr><td>4</td><td>{{ names.3 }}</td><td>{{ incomes.3 }}</td></tr>
+                        <tr><td>5</td><td>{{ names.4 }}</td><td>{{ incomes.4 }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="left div_table_box">
+            <div class="div_any_child">
+                <div class="div_any_title"><span class="glyphicon glyphicon-signal"></span> 创业潜力前5名 </div>
+                <div class="table_p">
+                    <table>
+                        <thead><tr>
+                            <th>排名</th>
+                            <th>姓名</th>
+                            <th>创业概率</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>1</td><td>{{ names_p.0 }}</td><td>{{ p.0 }}</td></tr>
+                        <tr><td>2</td><td>{{ names_p.1 }}</td><td>{{ p.1 }}</td></tr>
+                        <tr><td>3</td><td>{{ names_p.2 }}</td><td>{{ p.2 }}</td></tr>
+                        <tr><td>4</td><td>{{ names_p.3 }}</td><td>{{ p.3 }}</td></tr>
+                        <tr><td>5</td><td>{{ names_p.4 }}</td><td>{{ p.4 }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>后台管理-部门职员信息录入</title>
+{% endblock %}
+
+{% block js_diy_function %}
+<script>
+    function goBack1() {
+      window.location.href = '/depart/list/';
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="sm_section">
+<fieldset class="message_fieldset">
+    <legend>文件上传信息</legend>
+    <div style="margin-left: 100px; color: white">请注意：1、Excel表格需要按和手动输入模块相同的顺序保存各个变量；2、需要表头；3、需保证职员所在的部门存在于系统中；4、表格引入方法将为每个用户设置默认密码和普通用户类型。</div><br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="message_con inputfile_div">
+            <label>附件上传：</label>
+{#            <input type="file" class="message_input input_file">#}
+            <div class="button-container" style="display: flex; justify-content: center;">
+                <input type="file" name="excel_file" accept=".xlsx,.xls,.csv" class="btn btn-primary">
+                <input type="submit" value="提交" class="btn btn-primary">
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message_con" style="color: red; margin-left: 180px;">{{ message }}</div>
+                {% endfor %}
+
+            {% endif %}
+
+            <p></p>
+        </div>
+    </form>
+</fieldset>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    <fieldset class="message_fieldset">
+        <legend>手动录入信息</legend>
+        <div class="message_con">
+            {% for field in info %}
+                {% if field.label == "密码" %}
+                    <hr>
+                    <div style="margin-left: 100px; color: red">请谨慎设置密码，管理员没有权限在后续更改其他用户的密码！</div>
+                {% endif %}
+                {% if field.label == "用户类型" %}
+                    <hr>
+                {% endif %}
+                <div class="message_con">
+                    <label>{{ field.label }}：</label>{{ field }}
+                    <div class="message_con" style="color: red">{{ field.errors.0 }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="message_footer">
+            <button class="bule" type="submit">保存</button>
+            <button class="orgen" type="reset">重置</button>
+            <button class="orgen" type="button" onclick="goBack1()">取消</button>
+        </div>
+        <h1></h1>
+    </fieldset>
+</form>
+</section>
+{% endblock %}

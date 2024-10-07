@@ -1,0 +1,185 @@
+﻿{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>后台管理-创业数据管理</title>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/jquery/jQuery-2.2.0.min.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/table.js' %}"></script>
+<script src="{% static 'js/ztree/jquery.ztree.all-3.5.js' %}"></script>
+<script src="{% static 'js/listTree.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap-table.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap-table-zh-CN.min.js' %}"></script>
+<script src="{% static 'js/layer_v2.1/layer/layer.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!--内容部分-->
+<div class="clear"></div>
+<div class="con1 left" id="car_control">
+    <div class="left_table  left bow_shadow">
+        <p class="set_list"><i class="list_i"></i>  管理项目：</p>
+        <ul class="management">
+            <li class="management_active"><a href="/table/">创业数据管理</a></li>
+            <li><a href="/depart/list/">职员资料管理</a></li>
+{#            <li><a href="/user/list/">用户资料管理</a></li>#}
+            <li><a href="/report/list/">报告管理</a></li>
+        </ul>
+    </div>
+
+    <div class="right  right_table">
+        <form method="get">
+            <div class="table_find">
+                <p>
+                    <label>姓名：</label><input type="text" placeholder="模糊搜索姓名" name="name" value="{{ filt.0 }}">
+                    <label>联系电话：</label><input type="text" placeholder="模糊搜索电话号码" name="tel" value="{{ filt.1 }}">
+                    <label>是否创业：</label>
+                    <select name="entrepre">
+                        <option {% if filt.2 == '无筛选' %} selected {% endif %}>无筛选</option>
+                        <option {% if filt.2 == '未创业' %} selected {% endif %}>未创业</option>
+                        <option {% if filt.2 == '创业' %} selected {% endif %}>创业</option>
+                    </select>
+                    <label>创业概率预测：</label>
+                    <select name="possibility">
+                        <option {% if filt.3 == '无筛选' %} selected {% endif %}>无筛选</option>
+                        <option {% if filt.3 == '低(0-0.2)' %} selected {% endif %}>低(0-0.2)</option>
+                        <option {% if filt.3 == '中(0.2-0.8)' %} selected {% endif %}>中(0.2-0.8)</option>
+                        <option {% if filt.3 == '高(0.8-1)' %} selected {% endif %}>高(0.8-1)</option>
+                    </select>
+                </p>
+
+                <p><label>选择数据集：</label>
+                    <input name="db1" type="checkbox" checked disabled><span>上海财经大学“千村调查”</span>
+                    <input name="db2" type="checkbox" {% if filt.9 == 'on' %} checked {% endif %}><span>上海财经大学支教团调研数据</span>
+                    <input name="db3" type="checkbox" {% if filt.10 == 'on' %} checked {% endif %}><span>上财马院乡村振兴数据库</span>
+
+                    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span>应用筛选条件</button>
+                    <a href="/table/" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-refresh"></span>重置筛选条件</a>
+                    <span class="more_find right" onclick="openList()" id="open">其他查询选项>></span>
+                </p>
+
+                <div class="find_expend">
+                    <p>
+                        <label>家庭类型：</label>
+                        <select name="famtype">
+                            <option {% if filt.4 == '无筛选' %} selected {% endif %}>无筛选</option>
+                            <option {% if filt.4 == '普通家庭' %} selected {% endif %}>普通家庭</option>
+                            <option {% if filt.4 == '精英家庭' %} selected {% endif %}>精英家庭</option>
+                            <option {% if filt.4 == '人力残缺家庭' %} selected {% endif %}>人力残缺家庭</option>
+                        </select>
+                        <label>年收入水平：</label>
+                        <select name="income">
+                            <option {% if filt.5 == '无筛选' %} selected {% endif %}>无筛选</option>
+                            <option {% if filt.5 == '0~5K' %} selected {% endif %}>0~5K</option>
+                            <option {% if filt.5 == '5K~10K' %} selected {% endif %}>5K~10K</option>
+                            <option {% if filt.5 == '10K~20K' %} selected {% endif %}>10K~20K</option>
+                            <option {% if filt.5 == '20K~50K' %} selected {% endif %}>20K~50K</option>
+                            <option {% if filt.5 == '50K~100K' %} selected {% endif %}>50K~100K</option>
+                            <option {% if filt.5 == '100K~200K' %} selected {% endif %}>100K~200K</option>
+                            <option {% if filt.5 == '200K以上' %} selected {% endif %}>200K以上</option>
+                        </select>
+                        <label>起始日期：</label><input class="time_select" type="date" placeholder="筛选选定日期后的数据" name="start_date" value="{{ filt.6 }}">
+                        <label>截止日期：</label><input class="time_select" type="date" placeholder="筛选选定日期前的数据" name="end_date" value="{{ filt.7 }}">
+                        <span class="more_find right" onclick="closeList()">收起>></span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="table_div">
+                <p class="table_but">
+                    <a href="/message/">
+                        <i class="glyphicon glyphicon-plus"></i>新增数据
+                    </a>
+                    <a href="javascript:void(0)">
+                        <i class="glyphicon glyphicon-remove"></i>批量删除
+                    </a>
+                    <a href="/table/export/">
+                        <i class="glyphicon glyphicon-export"></i>导出表格
+                    </a>
+                </p>
+            </div>
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">上海财经大学“千村调查”关于农民创业的调查数据集</div>
+
+                <!-- Table -->
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>姓名</th>
+                        <th>联系电话</th>
+                        <th>家庭类型</th>
+                        <th>年收入水平（万元）</th>
+                        <th>是否创业</th>
+                        <th>创业概率预测(算法支持)</th>
+                        <th>调查时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% if queryset %}
+                            {% for obj in queryset %}
+                                <tr>
+                                    <th scope="row">{{ obj.id }}</th>
+                                    <td>{{ obj.name }}</td>
+                                    <td>{{ obj.tel }}</td>
+                                    {% if obj.famtype == 0 %}
+                                        <td>普通家庭</td>
+                                    {% elif obj.famtype == 1 %}
+                                        <td>人力残缺家庭</td>
+                                    {% else %}
+                                        <td>精英家庭</td>
+                                    {% endif %}
+                                    <td>{{ obj.income }}</td>
+                                    {% if obj.entrepre == 1 %}
+                                        <td>是</td>
+                                    {% else %}
+                                        <td>否</td>
+                                    {% endif %}
+                                    <td>{{ obj.possibility }}</td>
+                                    <td>{{ obj.recptime | date:"Y-m-d" }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-primary btn-xs">详细信息</a>
+                                        <a href="/table/{{ obj.id }}/{{ filt_string }}/edit/?page={{ page }}&div={{ div }}&page_size={{ page_size }}" class="btn btn-success btn-xs">编辑条目</a>
+                                        <a href="/table/{{ obj.id }}/{{ filt_string }}/delete/?page={{ page }}&div={{ div }}&page_size={{ page_size }}" class="btn btn-danger btn-xs">删除条目</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div>
+                <ul class="pagination">
+                    {{ page_string }}
+                </ul>
+
+                <ul class="pagination" style="float: right;">
+                    <li>
+                        <span>跳转到：</span>
+                        <input type="number" min="1" max="{{ total_page_count }}"
+                                style="position: relative; display: inline-block; width: 100px; border-radius: 0; border-left: white"
+                                name="page" class="form-control" placeholder="输入页码">
+                    </li>
+
+                    <button style="margin-left: -2px; border-radius: 3px; float: right; color: red;" class="btn btn-default" type="submit">执行分页设置</button>
+                    <li>
+                        <input type="number" min="2" max="15"
+                               style="position: relative; display: inline-block; width: 90px; border-radius: 0; float: right; border-left: white;"
+                               name="page_size" class="form-control" placeholder="每页条数" value="{{ page_size }}">
+                        <span style="float: right; border-radius: 0;">每页显示条数：</span>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

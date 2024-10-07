@@ -1,0 +1,55 @@
+{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>管理个人资料</title>
+{% endblock %}
+
+{% block right_nav %}
+{% if request.session.info.usertype == 0 %}
+<li><i class="nav_4"></i><a href="/table/">后台管理</a> </li>
+{% endif %}
+<li class="dropdown nav_active">
+{% endblock %}
+
+{% block js_diy_function %}
+<script>
+    function goBack2() {
+      window.location.href = '/index/';
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="sm_section">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <fieldset class="message_fieldset">
+            <legend>编辑个人信息</legend>
+            <div class="message_con">
+                {% for field in form %}
+                    {% if field.label == "账号（邮箱）" %}
+                        <hr>
+                        <div style="margin-left: 100px; color: red">请谨慎重置账户信息！</div>
+                    {% endif %}
+                    <div class="message_con">
+                        <label>{{ field.label }}：</label>{{ field }}
+                        <div class="message_con" style="color: red">{{ field.errors.0 }}</div>
+                    </div>
+                {% endfor %}
+{#                <div class="message_con" style="margin-left: 200px;">#}
+{#                <span class="btn btn-success btn-sm" style="float: right; margin-right: 180px;" onclick="openList()" id="open">修改账户信息>></span>#}
+{#                    <a href="/personal_data_edit/account/" class="btn btn-success btn-sm" style="float: right; margin-right: 180px;"><span class="glyphicon glyphicon-chevron-down"></span>修改账户信息</a>#}
+{#                </div>#}
+                <p></p>
+            </div>
+            <div class="message_footer">
+                <button class="bule" type="submit">保存</button>
+    {#            <button class="orgen" type="reset">重置</button>#}
+                <button class="orgen" type="button" onclick="goBack2()">取消</button>
+            </div>
+            <h1></h1>
+        </fieldset>
+    </form>
+</section>
+{% endblock %}

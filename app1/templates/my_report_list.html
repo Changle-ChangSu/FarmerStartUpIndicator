@@ -1,0 +1,122 @@
+{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>调研报告-我的报告</title>
+{% endblock %}
+
+{% block left_nav %}
+    <li><i class="nav_1"></i><a href="/index/">首页</a> </li>
+    <li class="nav_active"><span class="glyphicon glyphicon-list-alt" style="color: white"></span><a href="/report/list/">  调研报告</a></li>
+{% endblock %}
+
+{% block right_nav %}
+    {% if request.session.info.usertype == 0 %}
+        <li><i class="nav_4"></i><a href="/table/">后台管理</a> </li>
+    {% endif %}
+    <li class="dropdown">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/jquery/jQuery-2.2.0.min.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/table.js' %}"></script>
+<script src="{% static 'js/ztree/jquery.ztree.all-3.5.js' %}"></script>
+<script src="{% static 'js/listTree.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap-table.js' %}"></script>
+<script src="{% static 'js/bstable/js/bootstrap-table-zh-CN.min.js' %}"></script>
+<script src="{% static 'js/layer_v2.1/layer/layer.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="clear"></div>
+<div class="con1 left" id="car_control">
+    <div class="left_table  left bow_shadow">
+        <p class="set_list"><i class="list_i"></i>  导航：</p>
+        <ul class="management">
+            <li><a href="/report/list/">报告库</a></li>
+            <li class="management_active"><a href="/report/my_report_list/">我的报告</a></li>
+        </ul>
+    </div>
+
+    <div class="right  right_table">
+        <form method="get">
+            <div class="table_find">
+                <p>
+                    <a class="btn btn-success" style="margin-left: 50px;" href="#">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                        新建报告
+                    </a>
+{#                    <button class="btn btn-primary" type="submit" style="float: right; margin-right: 10px"><span class="glyphicon glyphicon-search"></span>应用筛选条件</button>#}
+{#                    <span style="float: right">点击以应用筛选条件<span class="glyphicon glyphicon-arrow-right"></span></span>#}
+                </p>
+
+            </div>
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">我的调研报告</div>
+                    <!-- Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>报告编号</th>
+                            <th>标题</th>
+                            <th>报告类型</th>
+                            <th>状态</th>
+                            <th>内容概览</th>
+                            <th>修改日期</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if queryset_emp %}
+                            {% for obj in queryset_emp %}
+                                <tr>
+                                    <th scope="row">{{ obj.id }}</th>
+                                    <td>{{ obj.name }}</td>
+                                    <td>{{ obj.tel }}</td>
+                                    <td>{{ obj.email }}</td>
+                                    <td>{{ obj.position }}</td>
+                                    <td>{{ obj.department.title }}</td>
+                                    <td style="width: 250px">
+                                        <a href="/emp/edit/{{ obj.id }}/{{ filt_string }}/?page={{ page }}&div={{ div }}&page_size={{ page_size }}" class="btn btn-success btn-xs">编辑条目</a>
+                                        <a href="/emp/delete/{{ obj.id }}/{{ filt_string }}/?page={{ page }}&div={{ div }}&page_size={{ page_size }}" class="btn btn-danger btn-xs">删除条目</a>
+                                        <a href="/emp/reset/{{ obj.id }}/{{ filt_string }}/?page={{ page }}&div={{ div }}&page_size={{ page_size }}" class="btn btn-primary btn-xs">重置密码</a>
+{#                                        <button onclick="confirmAction({{ obj.id }}, {{ filt_string }}, {{ page }}, {{ div }}, {{ page_size }})" class="btn btn-primary btn-xs">重置密码</button>#}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% endif %}
+                    </table>
+            </div>
+
+            <div>
+                <ul class="pagination">
+                    {{ page_string }}
+                </ul>
+
+                <ul class="pagination" style="float: right;">
+                    <li>
+                        <span>跳转到：</span>
+                        <input type="number" min="1" max="{{ total_page_count }}"
+                                style="position: relative; display: inline-block; width: 100px; border-radius: 0; border-left: white"
+                                name="page" class="form-control" placeholder="输入页码">
+                    </li>
+
+                    <button style="margin-left: -2px; border-radius: 3px; float: right; color: red;" class="btn btn-default" type="submit">执行分页设置</button>
+                    <li>
+                        <input type="number" min="2" max="15"
+                               style="position: relative; display: inline-block; width: 90px; border-radius: 0; float: right; border-left: white;"
+                               name="page_size" class="form-control" placeholder="每页条数" value="{{ page_size }}">
+                        <span style="float: right; border-radius: 0;">每页显示条数：</span>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

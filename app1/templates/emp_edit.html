@@ -1,0 +1,43 @@
+{% extends 'layout_general.html' %}
+{% load static %}
+
+{% block title %}
+<title>后台管理-部门职员信息录入</title>
+{% endblock %}
+
+{% block js_diy_function %}
+<script>
+    function goBack1() {
+      window.location.href = '/depart/list/';
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="sm_section">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <fieldset class="message_fieldset">
+            <legend>编辑职员{{ nid }}的信息</legend>
+            <div class="message_con">
+                {% for field in form %}
+                    {% if field.label == "用户类型" %}
+                        <hr>
+{#                        <div style="margin-left: 100px; color: red">请谨慎更改以下内容：</div>#}
+                    {% endif %}
+                    <div class="message_con">
+                        <label>{{ field.label }}：</label>{{ field }}
+                        <div class="message_con" style="color: red">{{ field.errors.0 }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="message_footer">
+                <button class="bule" type="submit">保存</button>
+    {#            <button class="orgen" type="reset">重置</button>#}
+                <button class="orgen" type="button" onclick="goBack1()">取消</button>
+            </div>
+            <h1></h1>
+        </fieldset>
+    </form>
+</section>
+{% endblock %}
